@@ -10,6 +10,7 @@ import '../repository/materiais_repository.dart';
 import '../viewmodel/catalogo_viewmodel.dart';
 import 'cadastro_materiais_view.dart';
 import 'kit_view.dart';
+import 'materiais_view.dart';
 import 'login_view.dart';
 import 'widgets/elementos_compartilhados.dart';
 
@@ -24,8 +25,7 @@ class CatalogoView extends StatefulWidget {
       required this.usuario,
       required this.loginRepository,
       required this.materiaisRepository,
-      required this.kitRepository
-      });
+      required this.kitRepository});
 
   @override
   State<CatalogoView> createState() => _CatalogoViewState();
@@ -62,8 +62,7 @@ class _CatalogoViewState extends State<CatalogoView> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('${material.nome} adicionado ao Kit.'),
         behavior: SnackBarBehavior.floating,
-        action:
-            SnackBarAction(label: 'Ver kit', onPressed: _abrirKit),
+        action: SnackBarAction(label: 'Ver kit', onPressed: _abrirKit),
         duration: const Duration(seconds: 2),
       ));
     }
@@ -72,8 +71,7 @@ class _CatalogoViewState extends State<CatalogoView> {
   Future<void> _abrirKit() async {
     await Navigator.of(context).push<void>(MaterialPageRoute<void>(
         builder: (_) => KitView(
-            repository: widget.kitRepository,
-            usuarioId: widget.usuario.id)));
+            repository: widget.kitRepository, usuarioId: widget.usuario.id)));
     if (!mounted) return;
     await _carregar();
   }
@@ -88,6 +86,19 @@ class _CatalogoViewState extends State<CatalogoView> {
       _nome = null;
       await _carregar();
     }
+  }
+
+  //tentei
+  Future<void> _abrirMaterial(Materiais material) async {
+    await Navigator.of(context).push<void>(MaterialPageRoute<void>(
+        builder: (_) => MaterialView(
+              repository: widget.materiaisRepository,
+              kitRepository: widget.kitRepository,
+              usuarioId: widget.usuario.id,
+              material: material,
+            )));
+    if (!mounted) return;
+    await _carregar();
   }
 
   void _sair() {
@@ -188,29 +199,29 @@ class _CatalogoViewState extends State<CatalogoView> {
               const Text('Nenhum material nesta categoria.')
             else if (materialNome.isEmpty)
               const Text('Nenhum material nesta categoria.')
-            else if(_nome==null)
+            else if (_nome == null)
               for (final material in materiais) ...[
                 _CartaoKit(
                   materiais: material,
                   carregando: _viewModel.materialEmEnvio == material.id,
                   desabilitado: _viewModel.materialEmEnvio != null,
-                  adicionar: () => _adicionar(material),
+                  adicionar: () => _abrirMaterial(material),
+                  //adicionar: () => _adicionar(material),
                 ),
                 const SizedBox(height: 16),
               ]
             else
-                for (final material in materialNome) ...[
-                  _CartaoKit(
-                    materiais: material,
-                    carregando: _viewModel.materialEmEnvio == material.id,
-                    desabilitado: _viewModel.materialEmEnvio != null,
-                    adicionar: () => _adicionar(material),
-                  ),
-                  const SizedBox(height: 16),
-                ]
-            ,
+              for (final material in materialNome) ...[
+                _CartaoKit(
+                  materiais: material,
+                  carregando: _viewModel.materialEmEnvio == material.id,
+                  desabilitado: _viewModel.materialEmEnvio != null,
+                  adicionar: () => _abrirMaterial(material),
+                  //adicionar: () => _adicionar(material),
+                ),
+                const SizedBox(height: 16),
+              ],
           ],
-
         ),
       ),
     );

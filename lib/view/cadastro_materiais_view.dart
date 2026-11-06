@@ -23,7 +23,7 @@ class _CadastroMaterialViewState extends State<CadastroMaterialView> {
   final _categoriaController = TextEditingController();
   final _camposAlterados = <String>{};
   late final CadastroMaterialViewModel _viewModel;
-  String _categoria = 'Novidades';
+  //String _categoria = 'Novidades';
 
   bool get _enviando => _viewModel.estado == EstadoTela.carregando;
 
@@ -45,7 +45,7 @@ class _CadastroMaterialViewState extends State<CadastroMaterialView> {
         nome: _nomeController.text.trim(),
         descricao: _descricaoController.text.trim(),
         preco: _lerPreco(_precoController.text)!,
-      categoria: _categoriaController.text.trim());
+        categoria: _categoriaController.text.trim());
     setState(_camposAlterados.clear);
     final cadastrado = await tarefa;
     if (!mounted) return;
@@ -110,7 +110,7 @@ class _CadastroMaterialViewState extends State<CadastroMaterialView> {
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                             labelText: 'Nome',
-                            hintText: 'Ex.: Bolo de chocolate',
+                            hintText: 'Ex.: lapis',
                             errorText: _erroCampo('nome')),
                         onChanged: (_) =>
                             setState(() => _camposAlterados.add('nome')),
@@ -126,8 +126,7 @@ class _CadastroMaterialViewState extends State<CadastroMaterialView> {
                         maxLines: 3,
                         decoration: InputDecoration(
                             labelText: 'Descrição',
-                            hintText:
-                                'Ingredientes, acompanhamentos ou tamanho',
+                            hintText: 'pra q serve',
                             alignLabelWithHint: true,
                             errorText: _erroCampo('descricao')),
                         onChanged: (_) =>
@@ -146,7 +145,7 @@ class _CadastroMaterialViewState extends State<CadastroMaterialView> {
                         textInputAction: TextInputAction.done,
                         decoration: InputDecoration(
                             labelText: 'Preço (R\$)',
-                            hintText: '10,50',
+                            hintText: '100,50',
                             prefixIcon: const Icon(Icons.payments_outlined),
                             errorText: _erroCampo('preco')),
                         onChanged: (_) =>
@@ -171,9 +170,9 @@ class _CadastroMaterialViewState extends State<CadastroMaterialView> {
                         onChanged: (_) =>
                             setState(() => _camposAlterados.add('categoria')),
                         validator: (valor) =>
-                        valor == null || valor.trim().isEmpty
-                            ? 'Informe a categoria do material.'
-                            : null,
+                            valor == null || valor.trim().isEmpty
+                                ? 'Informe a categoria do material.'
+                                : null,
                       ),
                       const SizedBox(height: 16),
                       FilledButton(

@@ -22,7 +22,7 @@ class Materiais {
       descricao: json['descricao'] as String,
       preco: (json['preco'] as num).toDouble(),
       categoria: json['categoria'] as String,
-      imageUrl: json['imagemUrl'] as String ?? '',
+      imageUrl: json['imagemUrl'] as String,
     );
   }
 

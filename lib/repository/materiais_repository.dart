@@ -9,7 +9,8 @@ class MateriaisRepository {
   Future<List<Materiais>> listar() async {
     final resposta = await cliente.dio.get('/materiais');
     return (resposta.data as List)
-        .map((materiais) => Materiais.fromJson(materiais as Map<String, dynamic>))
+        .map((materiais) =>
+            Materiais.fromJson(materiais as Map<String, dynamic>))
         .toList();
   }
 
@@ -17,7 +18,7 @@ class MateriaisRepository {
     required String nome,
     required String descricao,
     required double preco,
-    required String categoria ,
+    required String categoria,
     String imageUrl = '',
   }) async {
     final resposta = await cliente.dio.post(
@@ -30,6 +31,11 @@ class MateriaisRepository {
         'imageUrl': imageUrl,
       },
     );
+    return Materiais.fromJson(resposta.data as Map<String, dynamic>);
+  }
+
+  Future<Materiais> getMaterial(int materialId) async {
+    final resposta = await cliente.dio.post('/materiais/$materialId');
     return Materiais.fromJson(resposta.data as Map<String, dynamic>);
   }
 }
